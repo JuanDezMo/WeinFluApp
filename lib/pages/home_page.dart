@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/design/colors.dart';
 import 'package:my_first_app/design/radius.dart';
+import 'package:my_first_app/pages/new_page.dart';
 import 'package:my_first_app/widgets/custom_money_display.dart';
+import 'package:my_first_app/widgets/product_detail.dart';
 import '../widgets/home_app_bar_title.dart';
 import '../widgets/summary_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var buttonStyleInactive = ElevatedButton.styleFrom(
+      elevation: 0,
+      backgroundColor: WeinFluColors.brandLightColor,
+      shadowColor: WeinFluColors.brandLightColor);
+  var buttonStyleActive = ElevatedButton.styleFrom(
+      backgroundColor: WeinFluColors.brandSecondaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12), // <-- Radius
+      ));
+
+  Widget currentDetailWidget = const CategoriesWidget();
+  late ButtonStyle categorieBtnStyle;
+  late ButtonStyle recentTransactionsBtnStyle;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    categorieBtnStyle = buttonStyleActive;
+    recentTransactionsBtnStyle = buttonStyleInactive;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +53,30 @@ class HomePage extends StatelessWidget {
             child: HomeAppBarTitle(),
           ),
         ),
-        body: const Column(
+        body: Column(
           children: [
             TopHomePageBody(),
-//            MidHomePageBody(),
-//            Expanded(child: BottomHomePageBody()),
+            MidHomePageBody(
+            categorieBtnStyle: categorieBtnStyle,
+            recentTransactionsBtnStyle: recentTransactionsBtnStyle,
+            categoriesBtnAction: () {
+              setState(() {
+                currentDetailWidget = const CategoriesWidget();
+                categorieBtnStyle = buttonStyleActive;
+                recentTransactionsBtnStyle = buttonStyleInactive;
+              });
+            },
+            recentBtnAction: () {
+              setState(() {
+                categorieBtnStyle = buttonStyleInactive;
+                recentTransactionsBtnStyle = buttonStyleActive;
+                currentDetailWidget = const RecentTransactions();
+              });
+            },
+            ),
+            Expanded(
+              child: currentDetailWidget
+              ),
           ],
         ));
   }
@@ -80,6 +129,133 @@ class TopHomePageBody extends StatelessWidget {
             action: () => print('Spending'),
           )
         ],
+      ),
+    );
+  }
+}
+
+class MidHomePageBody extends StatelessWidget {
+  final ButtonStyle categorieBtnStyle;
+  final ButtonStyle recentTransactionsBtnStyle;
+  final void Function()? categoriesBtnAction;
+  final void Function()? recentBtnAction;
+  const MidHomePageBody(
+      {super.key,
+      required this.categorieBtnStyle,
+      required this.recentTransactionsBtnStyle,
+      required this.categoriesBtnAction,
+      required this.recentBtnAction});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        height: 104,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: WeinFluColors.brandLightColor,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ElevatedButton(
+                style: categorieBtnStyle,
+                onPressed: categoriesBtnAction,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                  child: Text(
+                    'Categories',
+                    style: TextStyle(
+                        color: WeinFluColors.brandDarkColor, fontSize: 14),
+                  ),
+                )),
+            Expanded(
+              child: ElevatedButton(
+                  style: recentTransactionsBtnStyle,
+                  onPressed: recentBtnAction,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                      child: Text(
+                          'Recent transaction',
+                          style: TextStyle(  
+                              color: WeinFluColors.brandLigthDarkColor, fontSize: 14),
+                        ),
+                  )),
+            ),
+          ],
+        ));
+  }
+}
+
+
+class CategoriesWidget extends StatelessWidget {
+  const CategoriesWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        TextButton(
+          style: const ButtonStyle(alignment: Alignment.centerRight),
+          child: const Text(
+            'View All',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(53, 97, 254, 1)),
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed('new-page');
+          },
+        ),
+        const ProductDetailCard(
+          pathToProductImage: 'assets/images/pizza.png',
+          amount: 391254.01,
+          productName: 'Food & Drink',
+          currentSells: '2250',
+          percentage: '1.8',
+          typeProductDetailCard: TypeProductDetailCard.incomes,
+        ),
+        const ProductDetailCard(
+          typeProductDetailCard: TypeProductDetailCard.incomes,
+          pathToProductImage: 'assets/images/tv.png',
+          amount: 3176254.01,
+          productName: 'Electronics',
+          currentSells: '2250',
+          percentage: '43.6',
+        ),
+        const ProductDetailCard(
+          typeProductDetailCard: TypeProductDetailCard.outcomes,
+          pathToProductImage: 'assets/images/health.png',
+          amount: 38.01,
+          productName: 'Health',
+          currentSells: '110',
+          percentage: '25.8',
+        ),
+      const ProductDetailCard(
+          pathToProductImage: 'assets/images/pizza.png',
+          amount: 491254.01,
+          productName: 'Food & Drink',
+          currentSells: '4250',
+          percentage: '4.8',
+          typeProductDetailCard: TypeProductDetailCard.incomes,
+        ),
+      ],
+    );
+  }
+}
+
+class RecentTransactions extends StatelessWidget {
+  const RecentTransactions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Este es el reto',
+        style: Theme.of(context).textTheme.headlineLarge,
       ),
     );
   }
