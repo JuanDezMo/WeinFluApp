@@ -3,7 +3,6 @@ import 'package:my_first_app/design/themes.dart';
 import 'package:my_first_app/pages/home_page.dart';
 import 'package:my_first_app/pages/new_page.dart';
 import 'package:my_first_app/pages/other_page.dart';
-
 import '../config/app_routes.dart';
 import '../models/user.dart';
 

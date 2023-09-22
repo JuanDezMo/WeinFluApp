@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/pages/home_page.dart';
-
 import '../models/user.dart';
 
 class OtherPage extends StatelessWidget {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_app/design/colors.dart';
 import 'package:my_first_app/design/radius.dart';
-import 'package:my_first_app/pages/new_page.dart';
 import 'package:my_first_app/widgets/custom_money_display.dart';
 import 'package:my_first_app/widgets/product_detail.dart';
+import '../config/app_routes.dart';
 import '../widgets/home_app_bar_title.dart';
 import '../widgets/summary_card.dart';
+import '../widgets/transaction_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -207,7 +208,7 @@ class CategoriesWidget extends StatelessWidget {
                 color: Color.fromRGBO(53, 97, 254, 1)),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed('new-page');
+            Navigator.of(context).pushNamed(AppRoutes.newPage);
           },
         ),
         const ProductDetailCard(
@@ -252,10 +253,94 @@ class RecentTransactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Este es el reto',
-        style: Theme.of(context).textTheme.headlineLarge,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        children: [
+          TextButton(
+            style: const ButtonStyle(alignment: Alignment.centerRight),
+            onPressed: (){
+              print('Click en ir a detalles');
+              // Aqui vendria el codigo que navega al page de all transaction.
+              }, 
+            child: const Text('View All',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: Color.fromRGBO(52, 97, 254, 1)
+              ),
+              )
+              ),
+              TransactionDetailByDay(
+                day: 'TUE',
+                isToday: true,
+                dayNumber: 4,
+                transactionsList: [
+                  TransactionDetail(
+                      movementName: 'Movement Name',
+                      transactionDate: 'Monday 5th,  September 2023',
+                      transactionType: TransactionType.negative,
+                      amount: 550.16),
+                  TransactionDetail(
+                      movementName: 'Movement Name',
+                      transactionDate: 'Monday 2th,  September 2023',
+                      transactionType: TransactionType.positive,
+                      amount: 430.35)
+                ]),
+
+                const SizedBox(
+                  height: 24,
+                ),
+
+                TransactionDetailByDay(
+                  day: 'MON',
+                  isToday: false,
+                  dayNumber: 3,
+                  transactionsList: [
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Monday 12th,  August 2023',
+                        transactionType: TransactionType.positive,
+                        amount: 150.16),
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Wendnesday 6th,  August 2023',
+                        transactionType: TransactionType.negative,
+                        amount: 230.35),
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Sunday 4th,  August 2023',
+                        transactionType: TransactionType.positive,
+                        amount: 150.16),
+                  ]),
+                  const SizedBox(
+                  height: 24,
+                ),
+
+                TransactionDetailByDay(
+                  day: 'SUN',
+                  isToday: false,
+                  dayNumber: 8,
+                  transactionsList: [
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Monday 20th,  July 2023',
+                        transactionType: TransactionType.positive,
+                        amount: 150.16),
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Wendnesday 11th,  July 2023',
+                        transactionType: TransactionType.negative,
+                        amount: 230.35),
+                    TransactionDetail(
+                        movementName: 'Movement Name',
+                        transactionDate: 'Sunday 3th,  July 2023',
+                        transactionType: TransactionType.positive,
+                        amount: 150.16),
+                  ]),
+
+                
+        ],
       ),
     );
   }

@@ -6,13 +6,15 @@ class CustomMoneyDisplay extends StatelessWidget {
   final TextStyle amountStyle;
   final TextStyle amountStyleSmall;
   final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final Widget? leftSimbol;
 
   const CustomMoneyDisplay(
       {super.key,
       required this.amount,
       required this.amountStyle,
       required this.amountStyleSmall,
-      this.padding});
+      this.padding, this.margin, this.leftSimbol});
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +31,9 @@ class CustomMoneyDisplay extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+          margin: margin,
           padding: padding,
-          child: Text('\$', style: amountStyleSmall),
+          child: leftSimbol ?? Text('\$', style: amountStyleSmall),
         ),
         RichText(
             text: TextSpan(children: [
